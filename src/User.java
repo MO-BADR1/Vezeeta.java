@@ -13,7 +13,6 @@ public abstract class User {
         this.email = email;
         this.password = password;
         this.ssn = ssn;
-        Muhamad yasser;
     }
 
 }
