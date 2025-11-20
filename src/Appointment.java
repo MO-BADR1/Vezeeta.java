@@ -5,13 +5,15 @@ public class Appointment {
     private String time;
     private boolean isBooked;
     private String patientName;
+    private String doctorName;
 
 
-    public Appointment(Date date, String time) {
+    public Appointment(Date date, String time,String doctorName) {
         this.date = date;
         this.time = time;
         this.isBooked = false;
         this.patientName = "";
+        this.doctorName = "";
     }
 
     public void book(String patientName) {
@@ -19,10 +21,11 @@ public class Appointment {
         this.patientName = patientName;
     }
 
-    public void cancel() {
+ /*
+  public void cancel() {
         this.isBooked = false;
         this.patientName = "";
-    }
+    }*/
 
     public boolean isAvailable() {
         return !isBooked;
@@ -33,5 +36,13 @@ public class Appointment {
     public String getTime() { return time; }
     public Date getDate() {
         return date;
+    }
+
+    public String getDoctorName() {
+        return doctorName;
+    }
+
+    public void setBooked(boolean booked) {
+        isBooked = booked;
     }
 }

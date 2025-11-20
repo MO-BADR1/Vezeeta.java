@@ -5,7 +5,7 @@ public class Doctor extends User {
         private String speciality;
         private int price;
         private String prescription;
-        private ArrayList<Appointment> appointments;
+        private ArrayList<Appointment> appointments=new ArrayList<>();
 
     public Doctor(String fname, String lname, int ssn, String email, String password, int id, String speciality, int price , ArrayList<Appointment> appointments) {
         super(fname, lname, ssn, email, password);
@@ -24,6 +24,7 @@ public class Doctor extends User {
                 System.out.println("Error: This slot (" + newApp.getDate() + " at " + newApp.getTime() + ") already exists!");
                 return false;
             }
+
         }
         appointments.add(newApp);
         System.out.println("Success: Slot added.");
@@ -31,7 +32,25 @@ public class Doctor extends User {
     }
     public void cancelapointment(Appointment app) {
         appointments.remove(app);
-        app.cancel();
+     //   app.cancel();
+    }
+    public void showAvailableAppointments() {
+        System.out.println("\n--- Available appointments for Dr. " + this.getFname() + " ---");
+
+        boolean found = false;
+
+        for (int i = 0; i < appointments.size(); i++) {
+            Appointment app = appointments.get(i);
+
+            if (app.isAvailable()) {
+                System.out.println("[" + (i+1) + "] " + app.toString());
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("Sorry, no available slots for this doctor currently.");
+        }
     }
 
         public int getId() {
@@ -66,5 +85,7 @@ public class Doctor extends User {
             this.prescription = prescription;
         }
 
-
+    public ArrayList<Appointment> getAppointments() {
+        return appointments;
     }
+}
