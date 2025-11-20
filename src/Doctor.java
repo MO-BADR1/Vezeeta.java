@@ -1,8 +1,6 @@
-<<<<<<< HEAD
+
 import java.util.ArrayList;
-=======
-public class Doctor extends User {
->>>>>>> 79fbb2b6ea850f4b40272c0fadf80b0f21de0ccd
+
 
 public class Doctor extends User {
     private int id;
