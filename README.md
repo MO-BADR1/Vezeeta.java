@@ -34,4 +34,4 @@ This project was built to demonstrate mastery of core Java and OOP concepts:
 ## 🚀 How to Run
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/YourUsername/Clinic-Management-System.git](https://github.com/YourUsername/Clinic-Management-System.git)
+   git clone [https://github.com/MO-BADR1/Clinic-Management-System.git](https://github.com/MO-BADR1/Clinic-Management-System.git)
