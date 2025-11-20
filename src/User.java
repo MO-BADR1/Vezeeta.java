@@ -54,5 +54,6 @@ public abstract class User {
     public void setSsn(int ssn) {
         this.ssn = ssn;
     }
+    public abstract void dashboard();
 
 }

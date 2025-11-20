@@ -37,6 +37,7 @@ public class Clinic {
                 doctorFound = true;
                 dr.showAvailableAppointments();
 
+
                 System.out.print("\nChoose Suitable appointment number: ");
                 int choice = sc.nextInt();
                 System.out.println();

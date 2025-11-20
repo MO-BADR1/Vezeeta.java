@@ -1,11 +1,12 @@
-import java.sql.Date;
-
+import java.util.Date;
 public class Appointment {
     private Date date;
     private String time;
     private boolean isBooked;
     private String patientName;
     private String doctorName;
+    private String prescription;
+
 
 
     public Appointment(Date date, String time,String doctorName) {
@@ -21,11 +22,11 @@ public class Appointment {
         this.patientName = patientName;
     }
 
- /*
+
   public void cancel() {
         this.isBooked = false;
         this.patientName = "";
-    }*/
+    }
 
     public boolean isAvailable() {
         return !isBooked;

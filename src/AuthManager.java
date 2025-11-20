@@ -79,6 +79,7 @@ public class AuthManager {
             String password = sc.nextLine();
             for (Doctor doc : doctors) {
                 if (doc.getEmail().equals(email) && doc.getPassword().equals(password)) {
+                    doc.dashboard();
                     return doc; // Found a doctor
                 }
             }

@@ -34,6 +34,8 @@ public class Patient extends User {
         appointments.add(newApp);
         return true;
     }
+    @Override
+    public void dashboard() {}
 
     public boolean editAppointment(Doctor doctor, Appointment existingApp, Date newDate, String newTime, Clinic clinic) {
         if (doctor == null || existingApp == null || clinic == null) return false;
