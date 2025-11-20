@@ -11,8 +11,8 @@ public class Doctor extends User {
         super(fname, lname, ssn, email, password);
         this.id = id;
         this.speciality = speciality;
-        //this.price = price;
-        //this.appointments = appointments;
+        this.price = price;
+        this.appointments = appointments;
     }
 
     public boolean addapointment(Appointment newApp) {
