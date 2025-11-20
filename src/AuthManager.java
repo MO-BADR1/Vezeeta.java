@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class AuthManager {
 
@@ -8,6 +9,15 @@ public class AuthManager {
     // Constructor Injection for Scanner
     public AuthManager(Scanner sc) {
         this.sc = sc;
+    }
+
+    // Email validation using a simple regex
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pat = Pattern.compile(emailRegex);
+        if (email == null)
+            return false;
+        return pat.matcher(email).matches();
     }
 
     // 1. Helper Method: Check in the doctors list
@@ -27,18 +37,33 @@ public class AuthManager {
     }
 
     // 3. Main Menu Display
-    public int loginMenu() {
-        System.out.println("\n=== Welcome to Vezeeta Clone ===");
+    public void loginMenu() {
+        System.out.println("\n=== Welcome to Vezeeta ===");
         System.out.println("1. Login");
         System.out.println("2. Register as a Patient");
         System.out.println("3. Register as a Doctor");
         System.out.print("Please enter your choice: ");
 
-        int choice = sc.nextInt();
-        sc.nextLine(); // Consume newline
-        return choice;
-    }
 
+    }
+    public void caller (ArrayList<Doctor> doctors, ArrayList<Patient> patients){
+        loginMenu();
+        int choice = sc.nextInt();
+        sc.nextLine();
+        switch (choice) {
+            case 1:
+                login(doctors, patients);
+                break;
+            case 2:
+                registerPatient(patients);
+                caller(doctors, patients);
+                break;
+            case 3:
+                registerDoctor(doctors);
+                caller(doctors, patients);
+                break;
+        }
+    }
     // 4. Login Logic (Updated for two lists)
     // Return type is still 'User' because both Doctor and Patient extend User
     public User login(ArrayList<Doctor> doctors, ArrayList<Patient> patients) {
@@ -67,22 +92,33 @@ public class AuthManager {
     }
 
     // 5. Patient Registration
-    public void registerPatient(ArrayList<Patient> patients, ArrayList<Doctor> doctors) {
+    public boolean registerPatient(ArrayList<Patient> patients) {
         System.out.println("\n--- New Patient Registration ---");
 
-        System.out.print("Enter Email: ");
-        String email = sc.nextLine();
-
-        if (emailExistsPatients(email, patients) || emailExistsDoctors(email, doctors)) {
-            System.out.println("Error: Email Already Exists! Try logging in.");
-            return;
+        String email;
+        while (true) {
+            System.out.print("Enter Email: ");
+            email = sc.nextLine();
+            if (!isValidEmail(email)) {
+                System.out.println("Error: Invalid email format.");
+                continue;
+            }
+            if (emailExistsPatients(email, patients)) {
+                System.out.println("Error: Email Already Exists! Try logging in.");
+                return false;
+            }
+            break;
         }
 
-        System.out.print("Enter Password: ");
-        String password = sc.nextLine();
-        if (password.length() < 6) {
-            System.out.println("Error: Password too short! Must be at least 6 chars.");
-            return;
+        String password;
+        while (true) {
+            System.out.print("Enter Password (at least 8 characters, with numbers and letters): ");
+            password = sc.nextLine();
+            if (password.length() < 8 || !password.matches(".*\\d.*") || !password.matches(".*[a-zA-Z].*")) {
+                System.out.println("Error: Password must be at least 8 characters long and contain both letters and numbers.");
+            } else {
+                break;
+            }
         }
 
         System.out.print("Enter First Name: ");
@@ -96,25 +132,37 @@ public class AuthManager {
         Patient newPatient = new Patient(fname, lname, ssn, email, password);
         patients.add(newPatient);
         System.out.println("Patient Registered Successfully!");
+        return true;
     }
 
     // 6. Doctor Registration
-    public void registerDoctor(ArrayList<Doctor> doctors, ArrayList<Patient> patients) {
+    public boolean registerDoctor(ArrayList<Doctor> doctors) {
         System.out.println("\n--- New Doctor Registration ---");
 
-        System.out.print("Enter Email: ");
-        String email = sc.nextLine();
-
-        if (emailExistsDoctors(email, doctors) || emailExistsPatients(email, patients)) {
-            System.out.println("Error: Email Already Exists! Try logging in.");
-            return;
+        String email;
+        while (true) {
+            System.out.print("Enter Email: ");
+            email = sc.nextLine();
+            if (!isValidEmail(email)) {
+                System.out.println("Error: Invalid email format.");
+                continue;
+            }
+            if (emailExistsDoctors(email, doctors)) {
+                System.out.println("Error: Email Already Exists! Try logging in.");
+                return false;
+            }
+            break;
         }
 
-        System.out.print("Enter Password: ");
-        String password = sc.nextLine();
-        if (password.length() < 6) {
-            System.out.println("Error: Password too short! Must be at least 6 chars.");
-            return;
+        String password;
+        while (true) {
+            System.out.print("Enter Password (at least 8 characters, with numbers and letters): ");
+            password = sc.nextLine();
+            if (password.length() < 8 || !password.matches(".*\\d.*") || !password.matches(".*[a-zA-Z].*")) {
+                System.out.println("Error: Password must be at least 8 characters long and contain both letters and numbers.");
+            } else {
+                break;
+            }
         }
 
         System.out.print("Enter First Name: ");
@@ -133,12 +181,11 @@ public class AuthManager {
         sc.nextLine();
 
         int id = doctors.size() + 1; // Simple ID generation
-        String prescription = ""; // Default value
         ArrayList<Appointment> appointments = new ArrayList<>();
-        Clinic c1 = new Clinic();
 
-        Doctor newDoctor = new Doctor(fname, lname, ssn, email, password, id, spec, price, prescription, appointments, c1);
+        Doctor newDoctor = new Doctor(fname, lname, ssn, email, password, id, spec, price, appointments);
         doctors.add(newDoctor);
         System.out.println("Doctor Registered Successfully!");
+        return true;
     }
 }
