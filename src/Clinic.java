@@ -3,8 +3,13 @@ public class Clinic {
     private String clinicName;
     private String address;
     private String phone;
-    private ArrayList<Doctor> doctors;
-    private ArrayList<Appointment> allAppointments;
+    private ArrayList<Doctor> doctors= new ArrayList<>();;
+    private ArrayList<Appointment> allAppointments= new ArrayList<>();;
+
+    public Clinic() {
+        this.doctors = new ArrayList<>();
+        this.allAppointments = new ArrayList<>();
+    }
     public void addDoctor(Doctor doctor) {
         doctors.add(doctor);
     }

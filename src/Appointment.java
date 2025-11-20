@@ -6,6 +6,7 @@ public class Appointment {
     private boolean isBooked;
     private String patientName;
 
+
     public Appointment(Date date, String time) {
         this.date = date;
         this.time = time;
@@ -27,5 +28,10 @@ public class Appointment {
         return !isBooked;
     }
 
-   
+    // this is to make the patient access his appointment and the doctor access patient
+    public String getPatientName() { return patientName; }
+    public String getTime() { return time; }
+    public Date getDate() {
+        return date;
+    }
 }
