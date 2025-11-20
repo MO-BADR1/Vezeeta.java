@@ -1,6 +1,6 @@
 
 
-public class Patient {
+public class Patient extends User {
     static int count=0;
     private String patientId;
     private String name;
