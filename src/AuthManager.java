@@ -39,9 +39,10 @@ public class AuthManager {
     // 3. Main Menu Display
     public void loginMenu() {
         System.out.println("\n=== Welcome to Vezeeta ===");
-        System.out.println("1. Login");
-        System.out.println("2. Register as a Patient");
+        System.out.println("1. Login as a Doctor");
+        System.out.println("2. Login as a Patient");
         System.out.println("3. Register as a Doctor");
+        System.out.println("4. Register as a Patient");
         System.out.print("Please enter your choice: ");
     }
     public void caller (ArrayList<Doctor> doctors, ArrayList<Patient> patients){
@@ -50,43 +51,66 @@ public class AuthManager {
         sc.nextLine();
         switch (choice) {
             case 1:
-                login(doctors, patients);
+                doctorLogin(doctors, patients);
                 break;
             case 2:
-                registerPatient(patients);
-                caller(doctors, patients);
+                patientLogin(doctors, patients);
                 break;
             case 3:
                 registerDoctor(doctors);
                 caller(doctors, patients);
                 break;
+            case 4:
+                registerPatient(patients);
+                caller(doctors, patients);
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+                caller(doctors, patients);
         }
     }
-    // 4. Login Logic (Updated for two lists)
-    // Return type is still 'User' because both Doctor and Patient extend User
-    public User login(ArrayList<Doctor> doctors, ArrayList<Patient> patients) {
-        System.out.print("Enter Email: ");
-        String email = sc.nextLine();
 
-        System.out.print("Enter Password: ");
-        String password = sc.nextLine();
-
-        // First: Search in the doctors list
-        for (Doctor doc : doctors) {
-            if (doc.getEmail().equals(email) && doc.getPassword().equals(password)) {
-                return doc; // Found a doctor
+    // Doctor Login
+    public Doctor doctorLogin (ArrayList<Doctor> doctors, ArrayList<Patient> patients){
+        while (true){
+            System.out.print("Enter Email: ");
+            String email = sc.nextLine();
+            System.out.print("Enter Password: ");
+            String password = sc.nextLine();
+            for (Doctor doc : doctors) {
+                if (doc.getEmail().equals(email) && doc.getPassword().equals(password)) {
+                    return doc; // Found a doctor
+                }
             }
+            System.out.println("Invalid email or password");
+            System.out.println("1. Continue\n " +
+                    "2. Return to main menu");
+            int choice = sc.nextInt();
+            if (choice == 1) continue;
+            else caller(doctors, patients);
         }
+    }
 
-        // Second: Search in the patients list
-        for (Patient pat : patients) {
-            if (pat.getEmail().equals(email) && pat.getPassword().equals(password)) {
-                return pat; // Found a patient
+
+    // Patient Login
+    public Patient patientLogin (ArrayList<Doctor> doctors, ArrayList<Patient> patients){
+        while (true){
+            System.out.print("Enter Email: ");
+            String email = sc.nextLine();
+            System.out.print("Enter Password: ");
+            String password = sc.nextLine();
+            for (Patient pat : patients) {
+                if (pat.getEmail().equals(email) && pat.getPassword().equals(password)) {
+                    return pat; // Found a patient
+                }
             }
+            System.out.println("Invalid email or password");
+            System.out.println("1. Continue\n " +
+                    "2. Return to main menu");
+            int choice = sc.nextInt();
+            if (choice == 1) continue;
+            else caller(doctors, patients);
         }
-
-        System.out.println("Invalid email or password!");
-        return null;
     }
 
     // 5. Patient Registration
