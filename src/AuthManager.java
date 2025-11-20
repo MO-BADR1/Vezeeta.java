@@ -43,8 +43,6 @@ public class AuthManager {
         System.out.println("2. Register as a Patient");
         System.out.println("3. Register as a Doctor");
         System.out.print("Please enter your choice: ");
-
-
     }
     public void caller (ArrayList<Doctor> doctors, ArrayList<Patient> patients){
         loginMenu();

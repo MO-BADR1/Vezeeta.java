@@ -84,8 +84,8 @@ public class Doctor extends User {
         public void setPrescription(String prescription) {
             this.prescription = prescription;
         }
-
     public ArrayList<Appointment> getAppointments() {
         return appointments;
     }
+
 }

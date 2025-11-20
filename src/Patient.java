@@ -8,6 +8,10 @@ public class Patient extends User {
     private ArrayList<String> surgicalOperations = new ArrayList<>();
     private ArrayList<Appointment> appointments = new ArrayList<>();
 
+    public Patient(String fname, String lname, int ssn, String email, String password) {
+        super(fname, lname, ssn, email, password);
+    }
+
     public Patient(String fname, String lname, int ssn, String email, String password,
                    String medicalHistory, ArrayList<String> chrinicDiseses,
                    ArrayList<String> surgicalOperations, ArrayList<Appointment> appointments) {
