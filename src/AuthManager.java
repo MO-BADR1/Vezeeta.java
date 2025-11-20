@@ -41,22 +41,22 @@ public class AuthManager {
         return true;
     }
     // Dr registration
-    public boolean DrRegister(Doctor doctor, ArrayList<User> allUsers) {
+    public boolean DrRegister(Doctor newDoctor, ArrayList<User> allUsers) {
         // checking if the email is found
         for (User user : allUsers) {
-            if (user.getEmail().equals(newPatient.getEmail())) {
+            if (user.getEmail().equals(newDoctor.getEmail())) {
                 System.out.println("Email Already Exists");
                 return false;
             }
         }
 
         // password validation
-        if (newPatient.getPassword().length() < 6) {
+        if (newDoctor.getPassword().length() < 6) {
             System.out.println("Password too short!");
             return false;
         }
         // if valid add new patient
-        allUsers.add(newPatient);
+        allUsers.add(newDoctor);
         System.out.println("Register successfully!");
         return true;
     }
