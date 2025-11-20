@@ -2,13 +2,14 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AuthManager {
-    int loginMenu (){
+    public int loginMenu (){
         System.out.println("1. Login" +
                 "\n2. SignUp");
         int choice;
         System.out.println("Please enter your choice : ");
         Scanner sc = new Scanner(System.in);
         choice = sc.nextInt();
+        sc.nextLine();
         return (choice);
     }
     public User login(String email, String password, ArrayList<User> allUsers) {
