@@ -7,7 +7,9 @@ public class Main {
         AuthManager authManager = new AuthManager(sc);
         ArrayList<Doctor> doctors = new ArrayList<>();
         ArrayList<Patient> patients = new ArrayList<>();
+        ArrayList<Clinic> Clinics = new ArrayList<>();
+        ArrayList<ClinicManager> clinicManagers = new ArrayList<>();
 
-        authManager.caller(doctors,patients);
+        authManager.caller(doctors,patients,Clinics,clinicManagers);
     }
 }

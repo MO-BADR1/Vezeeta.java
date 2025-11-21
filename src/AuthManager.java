@@ -35,46 +35,60 @@ public class AuthManager {
         }
         return false;
     }
+    private boolean emailExistsClinicManagers(String email,ArrayList<ClinicManager> clinicManagers) {
+        for (ClinicManager C : clinicManagers) {
+            if (C.getEmail().equals(email)) return true;
+        }
+        return false;
+    }
 
     // 3. Main Menu Display
     public void loginMenu() {
         System.out.println("\n=== Welcome to Vezeeta ===");
         System.out.println("1. Login as a Doctor");
         System.out.println("2. Login as a Patient");
-        System.out.println("3. Register as a Doctor");
-        System.out.println("4. Register as a Patient");
-        System.out.println("5. Exit");
+        System.out.println("3. Login as a Clinic Manager");
+        System.out.println("4. Register as a Doctor");
+        System.out.println("5. Register as a Patient");
+        System.out.println("6. Register as a Clinic Manager");
+        System.out.println("7. Exit");
         System.out.print("Please enter your choice: ");
     }
-    public void caller (ArrayList<Doctor> doctors, ArrayList<Patient> patients){
+    public void caller (ArrayList<Doctor> doctors, ArrayList<Patient> patients,ArrayList<Clinic> Clinics,ArrayList<ClinicManager> clinicManagers){
         loginMenu();
         int choice = sc.nextInt();
         sc.nextLine();
         switch (choice) {
             case 1:
-                doctorLogin(doctors, patients);
+                doctorLogin(doctors, patients,clinicManagers,Clinics);
                 break;
             case 2:
-                patientLogin(doctors, patients);
+                patientLogin(doctors, patients,clinicManagers,Clinics);
                 break;
             case 3:
-                registerDoctor(doctors);
-                caller(doctors, patients);
-                break;
+
             case 4:
-                registerPatient(patients);
-                caller(doctors, patients);
+                registerDoctor(doctors);
+                caller(doctors, patients, Clinics, clinicManagers);
                 break;
             case 5:
+                registerPatient(patients);
+                caller(doctors, patients, Clinics, clinicManagers);
+                break;
+            case 6:
+                RegisterClinicManager( clinicManagers);
+                caller(doctors, patients, Clinics, clinicManagers);
+
+            case 7:
                 return;
             default:
                 System.out.println("Invalid choice. Please try again.");
-                caller(doctors, patients);
+                caller(doctors, patients, Clinics, clinicManagers);
         }
     }
 
     // Doctor Login
-    public void doctorLogin (ArrayList<Doctor> doctors, ArrayList<Patient> patients){
+    public void doctorLogin (ArrayList<Doctor> doctors, ArrayList<Patient> patients, ArrayList<ClinicManager> clinicManagers, ArrayList<Clinic> Clinics){
         while (true){
             System.out.print("Enter Email: ");
             String email = sc.nextLine();
@@ -83,7 +97,7 @@ public class AuthManager {
             for (Doctor doc : doctors) {
                 if (doc.getEmail().equals(email) && doc.getPassword().equals(password)) {
                     doc.dashboard();
-                    caller(doctors, patients);
+                    caller(doctors, patients, Clinics, clinicManagers);
                     return;
                 }
             }
@@ -92,13 +106,13 @@ public class AuthManager {
                     "2. Return to main menu");
             int choice = sc.nextInt();
             if (choice == 1) continue;
-            else caller(doctors, patients);
+            else caller(doctors, patients, Clinics, clinicManagers);
         }
     }
 
 
     // Patient Login
-    public Patient patientLogin (ArrayList<Doctor> doctors, ArrayList<Patient> patients){
+    public Patient patientLogin (ArrayList<Doctor> doctors, ArrayList<Patient> patients, ArrayList<ClinicManager> clinicManagers,ArrayList<Clinic> Clinics){
         while (true){
             System.out.print("Enter Email: ");
             String email = sc.nextLine();
@@ -114,7 +128,7 @@ public class AuthManager {
                     "2. Return to main menu");
             int choice = sc.nextInt();
             if (choice == 1) continue;
-            else caller(doctors, patients);
+            else caller(doctors, patients, Clinics, clinicManagers);
         }
     }
 
@@ -214,5 +228,74 @@ public class AuthManager {
         doctors.add(newDoctor);
         System.out.println("Doctor Registered Successfully!");
         return true;
+    }
+    public Boolean RegisterClinicManager(ArrayList<ClinicManager> clinicManagers) {
+        System.out.println("\n--- New Clinic Manager Registration ---");
+
+        String email;
+        while (true) {
+            System.out.print("Enter Email: ");
+            email = sc.nextLine();
+            if (!isValidEmail(email)) {
+                System.out.println("Error: Invalid email format.");
+                continue;
+            }
+            if (emailExistsClinicManagers(email, clinicManagers)) {
+                System.out.println("Error: Email Already Exists! Try logging in.");
+                return false;
+            }
+            break;
+        }
+
+        String password;
+        while (true) {
+            System.out.print("Enter Password (at least 8 characters, with numbers and letters): ");
+            password = sc.nextLine();
+            if (password.length() < 8 || !password.matches(".*\\d.*") || !password.matches(".*[a-zA-Z].*")) {
+                System.out.println("Error: Password must be at least 8 characters long and contain both letters and numbers.");
+            } else {
+                break;
+            }
+        }
+
+        System.out.print("Enter First Name: ");
+        String fname = sc.nextLine();
+        System.out.print("Enter Last Name: ");
+        String lname = sc.nextLine();
+        System.out.print("Enter SSN: ");
+        int ssn = sc.nextInt();
+        System.out.print("Enter Your Clinic Name: ");
+        String clinName = sc.nextLine();
+        System.out.print("Enter Your Clinic Address: ");
+        String clinAddr = sc.nextLine();
+        System.out.print("Enter Your Clinic Phone Number: ");
+        String clinPhone = sc.nextLine();
+        System.out.print("Enter Your Clinic Maximum Number Of Patients Per Day: ");
+        int clinMax = sc.nextInt();
+        sc.nextLine(); // consume newline
+
+        ClinicManager  newClinicManager = new ClinicManager(fname, lname, ssn, email, password,clinName,clinAddr,clinPhone,clinMax);// CREATING NEW ONE
+        clinicManagers.add(newClinicManager);
+        System.out.println("Clinic Manager Registered Successfully!");
+        return true;
+    }
+    public  ClinicManager LoginClinicManager(ArrayList<Doctor> doctors, ArrayList<Patient> patients, ArrayList<ClinicManager> clinicManagers,ArrayList<Clinic> Clinics ) {
+        while (true){
+            System.out.print("Enter Email: ");
+            String email = sc.nextLine();
+            System.out.print("Enter Password: ");
+            String password = sc.nextLine();
+            for (ClinicManager man : clinicManagers) {
+                if (man.getEmail().equals(email) && man.getPassword().equals(password)) {
+                    return man; // Found a patient
+                }
+            }
+            System.out.println("Invalid email or password");
+            System.out.println("1. Continue\n " +
+                    "2. Return to main menu");
+            int choice = sc.nextInt();
+            if (choice == 1) continue;
+            else caller(doctors, patients, Clinics, clinicManagers);
+        }
     }
 }
