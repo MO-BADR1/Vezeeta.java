@@ -35,11 +35,9 @@ public class Appointment {
 
     @Override
     public String toString() {
-        // Use SimpleDateFormat to format the java.util.Date object nicely
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String formattedDate = formatter.format(this.date);
 
-        // Construct the display string
         String status = this.isBooked ? "BOOKED" : "AVAILABLE";
         String details = this.isBooked ? " | Patient: " + this.patientName : "";
 

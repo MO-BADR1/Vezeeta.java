@@ -141,20 +141,19 @@ Scanner sc=new Scanner(System.in);
                     this.showAllAppointmentsForCancellation();
 
                     if (appointments.isEmpty()) {
-                        break; // Already handled printing a message inside showAllAppointmentsForCancellation
+                        break;
                     }
 
                     System.out.print("Enter the number of the appointment slot to cancel (1-" + appointments.size() + "): ");
 
                     if (!sc.hasNextInt()) {
                         System.out.println("Invalid input. Please enter a number.");
-                        sc.nextLine(); // consume invalid input
+                        sc.nextLine();
                         break;
                     }
                     int indexToCancel = sc.nextInt();
-                    sc.nextLine(); // Consume newline
+                    sc.nextLine();
 
-                    // Check if the index is valid
                     if (indexToCancel >= 1 && indexToCancel <= appointments.size()) {
                         Appointment toRemove = appointments.get(indexToCancel - 1);
                         cancelapointment(toRemove);

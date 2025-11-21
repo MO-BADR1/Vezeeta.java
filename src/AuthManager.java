@@ -81,7 +81,7 @@ public class AuthManager {
                 if (doc.getEmail().equals(email) && doc.getPassword().equals(password)) {
                     doc.dashboard();
                     caller(doctors, patients);
-                    return; // Found a doctor
+                    return;
                 }
             }
             System.out.println("Invalid email or password");
