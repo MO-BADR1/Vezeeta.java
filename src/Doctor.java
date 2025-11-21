@@ -1,10 +1,12 @@
 import java.util.ArrayList;
-public class Doctor extends User {
+import java.util.Date;
+import java.util.Scanner;
 
+public class Doctor extends User {
+Scanner sc=new Scanner(System.in);
         private int id;
         private String speciality;
         private int price;
-        private String prescription;
         private ArrayList<Appointment> appointments=new ArrayList<>();
 
     public Doctor(String fname, String lname, int ssn, String email, String password, int id, String speciality, int price , ArrayList<Appointment> appointments) {
@@ -77,15 +79,113 @@ public class Doctor extends User {
             this.price = price;
         }
 
-        public String getPrescription() {
-            return prescription;
-        }
-
-        public void setPrescription(String prescription) {
-            this.prescription = prescription;
-        }
-
-    public ArrayList<Appointment> getAppointments() {
+        public ArrayList<Appointment> getAppointments() {
         return appointments;
+    }
+    int choice=-1;
+    @Override
+    public void dashboard() {
+       
+        do {
+            System.out.println("\n========================================");
+            System.out.println("   DOCTOR DASHBOARD: Dr. " + this.getFname());
+            System.out.println("========================================");
+            System.out.println("1. View My Available Appointments");
+            System.out.println("2. Add New Appointment Slot");
+            System.out.println("3. Cancel an Appointment");
+            System.out.println("4. Update Consultation Price");
+            System.out.println("5. View My Profile");
+            System.out.println("6. Add Prescription");
+            System.out.println("0. Logout");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+            switch (choice) {
+                case 1:
+                    this.showAvailableAppointments();
+                    break;
+                case 2:
+                    System.out.println("Enter Date Details:");
+                    System.out.print("Day: ");
+                    int day = sc.nextInt();
+                    sc.nextLine();
+                    System.out.println();
+                    System.out.print("Month: ");
+                    int month = sc.nextInt();
+                    sc.nextLine();
+                    System.out.println();
+                    System.out.print("Year: ");
+                    int year = sc.nextInt();
+                    sc.nextLine();
+                    System.out.println();
+                    System.out.print("Enter Time (e.g. 5:00PM): ");
+                    String time = sc.nextLine();
+                    Date reqDate = new Date(year - 1900, month - 1, day);
+                    Appointment newApp = new Appointment(reqDate, time, this.getFname());
+                    this.addapointment(newApp);
+                    break;
+                case 3:
+                    System.out.println("Enter Date Details:");
+                    System.out.print("Day: ");
+                    int dy = sc.nextInt();
+                    sc.nextLine();
+                    System.out.println();
+                    System.out.print("Month: ");
+                    int mnth = sc.nextInt();
+                    sc.nextLine();
+                    System.out.println();
+                    System.out.print("Year: ");
+                    int yr = sc.nextInt();
+                    sc.nextLine();
+                    System.out.println();
+                    System.out.print("Enter Time (e.g. 5:00PM): ");
+                    String tm = sc.nextLine();
+                    Date requiredDt = new Date(yr - 1900, mnth - 1, dy);
+                    Appointment toRemove = null;
+                    for (Appointment app : appointments) {
+                        if (app.getDate().equals(requiredDt) && app.getTime().equalsIgnoreCase(tm)) {
+                           toRemove = app;
+                           break;
+                        }
+                    }
+                    if (toRemove != null) {
+                        cancelapointment(toRemove);
+                        System.out.println("Success: Slot deleted.");
+                    } else {
+                        System.out.println("Sorry! no previous appointment found for the given date and time.");
+                    }
+                    break;
+
+                case 4:
+                    System.out.print("Enter new price: ");
+                    price = sc.nextInt();
+                    sc.nextLine();
+                    System.out.println();
+                    this.setPrice(price);
+                    break;
+                case 5:
+                    System.out.println(this.toString());
+                case 6:
+                    System.out.println("Add Prescription - Not implemented yet.");
+                    break;
+                case 0:
+                    System.out.println("Logging out...");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice!");
+            }
+
+
+        }
+            while(choice!=0);
+    }
+
+    @Override
+    public String toString() {
+        return "Doctor{" +
+                "id=" + id +
+                ", speciality='" + speciality + '\'' +
+                ", price=" + price +
+                "} " + super.toString();
     }
 }
