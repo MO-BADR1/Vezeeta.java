@@ -43,6 +43,7 @@ public class AuthManager {
         System.out.println("2. Login as a Patient");
         System.out.println("3. Register as a Doctor");
         System.out.println("4. Register as a Patient");
+        System.out.println("5. Exit");
         System.out.print("Please enter your choice: ");
     }
     public void caller (ArrayList<Doctor> doctors, ArrayList<Patient> patients){
@@ -64,6 +65,8 @@ public class AuthManager {
                 registerPatient(patients);
                 caller(doctors, patients);
                 break;
+            case 5:
+                return;
             default:
                 System.out.println("Invalid choice. Please try again.");
                 caller(doctors, patients);

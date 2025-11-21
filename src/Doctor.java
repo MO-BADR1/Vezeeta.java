@@ -141,6 +141,7 @@ Scanner sc=new Scanner(System.in);
                     this.showAllAppointmentsForCancellation();
 
                     if (appointments.isEmpty()) {
+                        System.out.println("There is no appointment slot to cancel.");
                         break;
                     }
 
