@@ -83,6 +83,20 @@ Scanner sc=new Scanner(System.in);
         return appointments;
     }
     int choice=-1;
+
+    public void showAllAppointmentsForCancellation() {
+        if (appointments.isEmpty()) {
+            System.out.println("You currently have no appointment slots scheduled.");
+            return;
+        }
+
+        System.out.println("\n--- All Scheduled Slots for Dr. " + this.getFname() + " ---");
+        for (int i = 0; i < appointments.size(); i++) {
+            Appointment app = appointments.get(i);
+            // Uses the toString() method you fixed in Appointment.java
+            System.out.println("[" + (i + 1) + "] " + app.toString());
+        }
+    }
     @Override
     public void dashboard() {
        
@@ -124,34 +138,29 @@ Scanner sc=new Scanner(System.in);
                     this.addapointment(newApp);
                     break;
                 case 3:
-                    System.out.println("Enter Date Details:");
-                    System.out.print("Day: ");
-                    int dy = sc.nextInt();
-                    sc.nextLine();
-                    System.out.println();
-                    System.out.print("Month: ");
-                    int mnth = sc.nextInt();
-                    sc.nextLine();
-                    System.out.println();
-                    System.out.print("Year: ");
-                    int yr = sc.nextInt();
-                    sc.nextLine();
-                    System.out.println();
-                    System.out.print("Enter Time (e.g. 5:00PM): ");
-                    String tm = sc.nextLine();
-                    Date requiredDt = new Date(yr - 1900, mnth - 1, dy);
-                    Appointment toRemove = null;
-                    for (Appointment app : appointments) {
-                        if (app.getDate().equals(requiredDt) && app.getTime().equalsIgnoreCase(tm)) {
-                           toRemove = app;
-                           break;
-                        }
+                    this.showAllAppointmentsForCancellation();
+
+                    if (appointments.isEmpty()) {
+                        break; // Already handled printing a message inside showAllAppointmentsForCancellation
                     }
-                    if (toRemove != null) {
+
+                    System.out.print("Enter the number of the appointment slot to cancel (1-" + appointments.size() + "): ");
+
+                    if (!sc.hasNextInt()) {
+                        System.out.println("Invalid input. Please enter a number.");
+                        sc.nextLine(); // consume invalid input
+                        break;
+                    }
+                    int indexToCancel = sc.nextInt();
+                    sc.nextLine(); // Consume newline
+
+                    // Check if the index is valid
+                    if (indexToCancel >= 1 && indexToCancel <= appointments.size()) {
+                        Appointment toRemove = appointments.get(indexToCancel - 1);
                         cancelapointment(toRemove);
-                        System.out.println("Success: Slot deleted.");
+                        System.out.println("Success: Slot [" + indexToCancel + "] deleted: " + toRemove.toString());
                     } else {
-                        System.out.println("Sorry! no previous appointment found for the given date and time.");
+                        System.out.println("Error: Invalid number. No slot found for that index.");
                     }
                     break;
 
@@ -169,6 +178,7 @@ Scanner sc=new Scanner(System.in);
                     break;
                 case 0:
                     System.out.println("Logging out...");
+
                     break;
 
                 default:

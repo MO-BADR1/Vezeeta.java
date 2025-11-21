@@ -1,4 +1,5 @@
 import java.util.Date;
+import java.text.SimpleDateFormat;
 public class Appointment {
     private Date date;
     private String time;
@@ -30,6 +31,22 @@ public class Appointment {
 
     public boolean isAvailable() {
         return !isBooked;
+    }
+
+    @Override
+    public String toString() {
+        // Use SimpleDateFormat to format the java.util.Date object nicely
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String formattedDate = formatter.format(this.date);
+
+        // Construct the display string
+        String status = this.isBooked ? "BOOKED" : "AVAILABLE";
+        String details = this.isBooked ? " | Patient: " + this.patientName : "";
+
+        return "Date: " + formattedDate +
+                " | Time: " + time +
+                " | Status: " + status +
+                details;
     }
 
     // this is to make the patient access his appointment and the doctor access patient

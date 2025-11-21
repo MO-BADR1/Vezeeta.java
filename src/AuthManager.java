@@ -71,7 +71,7 @@ public class AuthManager {
     }
 
     // Doctor Login
-    public Doctor doctorLogin (ArrayList<Doctor> doctors, ArrayList<Patient> patients){
+    public void doctorLogin (ArrayList<Doctor> doctors, ArrayList<Patient> patients){
         while (true){
             System.out.print("Enter Email: ");
             String email = sc.nextLine();
@@ -80,7 +80,8 @@ public class AuthManager {
             for (Doctor doc : doctors) {
                 if (doc.getEmail().equals(email) && doc.getPassword().equals(password)) {
                     doc.dashboard();
-                    return doc; // Found a doctor
+                    caller(doctors, patients);
+                    return; // Found a doctor
                 }
             }
             System.out.println("Invalid email or password");
