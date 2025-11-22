@@ -9,12 +9,17 @@ public class Clinic {
     private ArrayList<Appointment> allAppointments= new ArrayList<>();
     private int maxPatients=0;
     private static int dayPatient=0;
+    private final int ManagerSSn;
+    private  final String clinicID;
 
-    public Clinic(String clinicName, String address, String phone,int maxPatients) {
+    public Clinic(String clinicName, String address, String phone,int maxPatients,int ManagerSSN,String clinicID) {
         this.clinicName = clinicName;
         this.address = address;
         this.phone = phone;
         this.maxPatients = maxPatients;
+        this.ManagerSSn = ManagerSSN;
+        this.clinicID = clinicID;
+
     }
     public void addDoctor(Doctor doctor) {
         doctorsClinic.add(doctor);
