@@ -272,9 +272,13 @@ public class AuthManager {
         String clinPhone = sc.nextLine();
         System.out.print("Enter Your Clinic Maximum Number Of Patients Per Day: ");
         int clinMax = sc.nextInt();
+        System.out.println("Enter Your Clinic ID: ");
+        String clinID = sc.nextLine();
+
+        System.out.println("\n--- New Clinic Manager Registration ---");
         sc.nextLine(); // consume newline
 
-        ClinicManager  newClinicManager = new ClinicManager(fname, lname, ssn, email, password,clinName,clinAddr,clinPhone,clinMax);// CREATING NEW ONE
+        ClinicManager  newClinicManager = new ClinicManager(fname, lname, ssn, email, password,clinName,clinAddr,clinPhone,clinMax,clinID);// CREATING NEW ONE
         clinicManagers.add(newClinicManager);
         System.out.println("Clinic Manager Registered Successfully!");
         return true;
