@@ -126,7 +126,7 @@ public class AuthManager {
             String password = sc.nextLine();
             for (Patient pat : patients) {
                 if (pat.getEmail().equals(email) && pat.getPassword().equals(password)) {
-                    return pat; // Found a patient
+                    pat.dashboard(); // Found a patient
                 }
             }
             System.out.println("Invalid email or password");
