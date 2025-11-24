@@ -5,7 +5,7 @@ public class Clinic {
     private String clinicName;
     private String address;
     private String phone;
-    private ArrayList<Doctor> doctorsClinic= new ArrayList<>();
+    private ArrayList<Doctor> clinicDoctors= new ArrayList<>();
     private ArrayList<Appointment> allAppointments= new ArrayList<>();
     private int maxPatients=0;
     private static int dayPatient=0;
@@ -22,9 +22,13 @@ public class Clinic {
 
     }
     public void addDoctor(Doctor doctor) {
-        doctorsClinic.add(doctor);
-
+        clinicDoctors.add(doctor);
     }
+
+    public void removeDoctor(int doctorId) {
+        clinicDoctors.removeIf(doctor -> doctor.getId() == doctorId);
+    }
+
     public boolean bookAppointment(Patient patient, int maxCapacity) {
         if (this.dayPatient >= maxCapacity) {
             System.out.println("Sorry, the clinic is at full capacity today.");
@@ -37,7 +41,7 @@ public class Clinic {
 
         boolean doctorFound = false;
 
-        for (Doctor dr : doctorsClinic) {
+        for (Doctor dr : clinicDoctors) {
             if (reqDr.equalsIgnoreCase(dr.getFname())) {
                 doctorFound = true;
                 dr.showAvailableAppointments();
@@ -80,7 +84,7 @@ public class Clinic {
         return false;
     }
         public Doctor findDoctorByName(String name){
-            for (Doctor doctor : doctorsClinic) {
+            for (Doctor doctor : clinicDoctors) {
                 if (doctor.getFname().equals(name)) {
                     return doctor;
                 }
@@ -89,7 +93,7 @@ public class Clinic {
 
         }
         public Doctor findDoctorById ( int id){
-            for (Doctor doctor : doctorsClinic) {
+            for (Doctor doctor : clinicDoctors) {
                 if (doctor.getId() == id) {
                     return doctor;
                 }
@@ -101,8 +105,11 @@ public class Clinic {
             allAppointments.add(appy);
         }
 
-
+    public String getClinicName() {
+        return clinicName;
     }
 
-
-
+    public ArrayList<Doctor> getClinicDoctors() {
+        return clinicDoctors;
+    }
+}

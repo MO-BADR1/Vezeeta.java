@@ -7,6 +7,7 @@ Scanner sc=new Scanner(System.in);
         private int id;
         private String speciality;
         private int price;
+        private static ArrayList<Doctor> alldoctors=new ArrayList<>();
         private ArrayList<Appointment> appointments=new ArrayList<>();
 
     public Doctor(String fname, String lname, int ssn, String email, String password, int id, String speciality, int price , ArrayList<Appointment> appointments) {
@@ -15,6 +16,7 @@ Scanner sc=new Scanner(System.in);
         this.speciality = speciality;
         this.price = price;
         this.appointments = appointments;
+        alldoctors.add(this);
     }
 
     public boolean addapointment(Appointment newApp) {
@@ -116,6 +118,7 @@ Scanner sc=new Scanner(System.in);
             switch (choice) {
                 case 1:
                     this.showAvailableAppointments();
+                    Main.cls();
                     break;
                 case 2:
                     System.out.println("Enter Date Details:");
@@ -136,12 +139,14 @@ Scanner sc=new Scanner(System.in);
                     Date reqDate = new Date(year - 1900, month - 1, day);
                     Appointment newApp = new Appointment(reqDate, time, this.getFname());
                     this.addapointment(newApp);
+                    Main.cls();
                     break;
                 case 3:
                     this.showAllAppointmentsForCancellation();
 
                     if (appointments.isEmpty()) {
                         System.out.println("There is no appointment slot to cancel.");
+                        Main.cls();
                         break;
                     }
 
@@ -150,6 +155,7 @@ Scanner sc=new Scanner(System.in);
                     if (!sc.hasNextInt()) {
                         System.out.println("Invalid input. Please enter a number.");
                         sc.nextLine();
+                        Main.cls();
                         break;
                     }
                     int indexToCancel = sc.nextInt();
@@ -162,6 +168,7 @@ Scanner sc=new Scanner(System.in);
                     } else {
                         System.out.println("Error: Invalid number. No slot found for that index.");
                     }
+                    Main.cls();
                     break;
 
                 case 4:
@@ -170,11 +177,15 @@ Scanner sc=new Scanner(System.in);
                     sc.nextLine();
                     System.out.println();
                     this.setPrice(price);
+                    Main.cls();
                     break;
                 case 5:
                     System.out.println(this.toString());
+                    Main.cls();
+                    break;
                 case 6:
                     System.out.println("Add Prescription - Not implemented yet.");
+                    Main.cls();
                     break;
                 case 0:
                     System.out.println("Logging out...");
@@ -192,10 +203,21 @@ Scanner sc=new Scanner(System.in);
 
     @Override
     public String toString() {
-        return "Doctor{" +
+        return "Doctor"+this.getFname()+"{" +
                 "id=" + id +
                 ", speciality='" + speciality + '\'' +
                 ", price=" + price +
-                "} " + super.toString();
+                "} ";
+    }
+    public static ArrayList<Doctor> getalldoctors(){
+       return alldoctors;
+    }
+    //This is for printing all doctors
+    public static void getalldoctor(){
+        for (int i = 0; i < alldoctors.size(); i++) {
+            Doctor doc = alldoctors.get(i);
+            // Uses the toString() method you fixed in Appointment.java
+            System.out.println("[" + (i + 1) + "] " + doc.toString());
+        }
     }
 }

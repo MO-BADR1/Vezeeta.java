@@ -66,23 +66,28 @@ public class AuthManager {
                 patientLogin(doctors, patients,clinicManagers,Clinics);
                 break;
             case 3:
-
+                LoginClinicManager( doctors, patients,  clinicManagers, Clinics );
+                break;
             case 4:
                 registerDoctor(doctors);
+                Main.cls();
                 caller(doctors, patients, Clinics, clinicManagers);
                 break;
             case 5:
                 registerPatient(patients);
+                Main.cls();
                 caller(doctors, patients, Clinics, clinicManagers);
                 break;
             case 6:
                 RegisterClinicManager( clinicManagers);
+                Main.cls();
                 caller(doctors, patients, Clinics, clinicManagers);
 
             case 7:
                 return;
             default:
                 System.out.println("Invalid choice. Please try again.");
+                Main.cls();
                 caller(doctors, patients, Clinics, clinicManagers);
         }
     }
@@ -97,6 +102,7 @@ public class AuthManager {
             for (Doctor doc : doctors) {
                 if (doc.getEmail().equals(email) && doc.getPassword().equals(password)) {
                     doc.dashboard();
+                    Main.cls();
                     caller(doctors, patients, Clinics, clinicManagers);
                     return;
                 }
@@ -264,6 +270,7 @@ public class AuthManager {
         String lname = sc.nextLine();
         System.out.print("Enter SSN: ");
         int ssn = sc.nextInt();
+        sc.nextLine();
         System.out.print("Enter Your Clinic Name: ");
         String clinName = sc.nextLine();
         System.out.print("Enter Your Clinic Address: ");
@@ -272,11 +279,11 @@ public class AuthManager {
         String clinPhone = sc.nextLine();
         System.out.print("Enter Your Clinic Maximum Number Of Patients Per Day: ");
         int clinMax = sc.nextInt();
-        System.out.println("Enter Your Clinic ID: ");
+        sc.nextLine();
+        System.out.print("Enter Your Clinic ID: ");
         String clinID = sc.nextLine();
 
         System.out.println("\n--- New Clinic Manager Registration ---");
-        sc.nextLine(); // consume newline
 
         ClinicManager  newClinicManager = new ClinicManager(fname, lname, ssn, email, password,clinName,clinAddr,clinPhone,clinMax,clinID);// CREATING NEW ONE
         clinicManagers.add(newClinicManager);
@@ -291,6 +298,9 @@ public class AuthManager {
             String password = sc.nextLine();
             for (ClinicManager man : clinicManagers) {
                 if (man.getEmail().equals(email) && man.getPassword().equals(password)) {
+                    man.dashboard();
+                    Main.cls();
+                    caller(doctors, patients, Clinics, clinicManagers);
                     return man; // Found a patient
                 }
             }
