@@ -26,7 +26,7 @@ public class Patient extends User {
             System.out.println("5. Exit Dashboard");
             System.out.print("Choose an option: ");
             choice = sc.nextInt();
-            sc.nextLine(); 
+            sc.nextLine(); // consume newline
 
             switch (choice) {
                 case 1:
