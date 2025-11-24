@@ -3,12 +3,21 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class Doctor extends User {
-Scanner sc=new Scanner(System.in);
+        private ArrayList<Appointment> appointments=new ArrayList<>();
+
+    public static ArrayList<Doctor> getAlldoctors() {
+        return alldoctors;
+    }
+
+    public static void setAlldoctors(ArrayList<Doctor> alldoctors) {
+        Doctor.alldoctors = alldoctors;
+    }
+
+    Scanner sc=new Scanner(System.in);
         private int id;
         private String speciality;
         private int price;
         private static ArrayList<Doctor> alldoctors=new ArrayList<>();
-        private ArrayList<Appointment> appointments=new ArrayList<>();
 
     public Doctor(String fname, String lname, int ssn, String email, String password, int id, String speciality, int price , ArrayList<Appointment> appointments) {
         super(fname, lname, ssn, email, password);
@@ -112,6 +121,7 @@ Scanner sc=new Scanner(System.in);
             System.out.println("4. Update Consultation Price");
             System.out.println("5. View My Profile");
             System.out.println("6. Add Prescription");
+            System.out.println("7. Find Doctor's Clinics");
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
             choice = sc.nextInt();
@@ -187,6 +197,11 @@ Scanner sc=new Scanner(System.in);
                     System.out.println("Add Prescription - Not implemented yet.");
                     Main.cls();
                     break;
+                case 7:
+                    System.out.println("Find Doctor's Clinics");
+                    Clinic.viewDoctorClinics(this.getId());
+                    Main.cls();
+                    break;
                 case 0:
                     System.out.println("Logging out...");
 
@@ -220,4 +235,7 @@ Scanner sc=new Scanner(System.in);
             System.out.println("[" + (i + 1) + "] " + doc.toString());
         }
     }
+//    public void getDoctorClinics(){
+//        for ()
+//    }
 }

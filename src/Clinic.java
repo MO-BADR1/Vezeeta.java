@@ -11,6 +11,7 @@ public class Clinic {
     private static int dayPatient=0;
     private final int ManagerSSn;
     private  final String clinicID;
+    private static ArrayList<Clinic>allClinics=new ArrayList<>();
 
     public Clinic(String clinicName, String address, String phone,int maxPatients,int ManagerSSN,String clinicID) {
         this.clinicName = clinicName;
@@ -19,6 +20,7 @@ public class Clinic {
         this.maxPatients = maxPatients;
         this.ManagerSSn = ManagerSSN;
         this.clinicID = clinicID;
+        allClinics.add(this);
 
     }
     public void addDoctor(Doctor doctor) {
@@ -28,6 +30,7 @@ public class Clinic {
     public void removeDoctor(int doctorId) {
         clinicDoctors.removeIf(doctor -> doctor.getId() == doctorId);
     }
+
 
     public boolean bookAppointment(Patient patient, int maxCapacity) {
         if (this.dayPatient >= maxCapacity) {
@@ -111,5 +114,14 @@ public class Clinic {
 
     public ArrayList<Doctor> getClinicDoctors() {
         return clinicDoctors;
+    }
+    public static void viewDoctorClinics(int doctorId)
+    {
+        for (Clinic clinic : allClinics) {
+            if (clinic.findDoctorById(doctorId) != null) {
+                System.out.println("Dr. " + clinic.findDoctorById(doctorId).getFname() + " is in " + clinic.getClinicName());
+            }
+        }
+
     }
 }
