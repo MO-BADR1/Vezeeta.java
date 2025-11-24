@@ -1,5 +1,6 @@
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Scanner;
 
 public class Patient extends User {
     private String medicalHistory = "No medical history";
@@ -11,84 +12,109 @@ public class Patient extends User {
         super(fname, lname, ssn, email, password);
     }
 
-    public Patient(String fname, String lname, int ssn, String email, String password,
-                   String medicalHistory, ArrayList<String> chronicDiseases,
-                   ArrayList<String> surgicalOperations, ArrayList<Appointment> appointments) {
-        super(fname, lname, ssn, email, password);
-        this.medicalHistory = medicalHistory != null ? medicalHistory : "No medical history";
-        this.chronicDiseases = chronicDiseases != null ? chronicDiseases : new ArrayList<>();
-        this.surgicalOperations = surgicalOperations != null ? surgicalOperations : new ArrayList<>();
-        this.appointments = appointments != null ? appointments : new ArrayList<>();
-    }
-
     @Override
     public void dashboard() {
-        System.out.println("===== Patient Dashboard =====");
-        System.out.println("Name: " + getFname() + " " + getLname());
-        System.out.println("SSN: " + getSsn());
-        System.out.println("Email: " + getEmail());
-        System.out.println("Medical History: " + medicalHistory);
+        Scanner sc = new Scanner(System.in);
+        int choice;
 
-        System.out.println("\nChronic Diseases:");
-        if (chronicDiseases.isEmpty()) System.out.println(" - None");
-        else chronicDiseases.forEach(d -> System.out.println(" - " + d));
+        do {
+            System.out.println("\n===== Patient Dashboard =====");
+            System.out.println("1. View Appointments");
+            System.out.println("2. Add Appointment");
+            System.out.println("3. Cancel Appointment");
+            System.out.println("4. View Medical History");
+            System.out.println("5. Exit Dashboard");
+            System.out.print("Choose an option: ");
+            choice = sc.nextInt();
+            sc.nextLine(); 
 
-        System.out.println("\nSurgical Operations:");
-        if (surgicalOperations.isEmpty()) System.out.println(" - None");
-        else surgicalOperations.forEach(op -> System.out.println(" - " + op));
-
-        System.out.println("\nAppointments:");
-        if (appointments.isEmpty()) System.out.println(" - No appointments booked");
-        else {
-            for (Appointment a : appointments) {
-                System.out.println(" - Date: " + a.getDate() +
-                        " Time: " + a.getTime() +
-                        " Doctor: " + a.getDoctorName() +
-                        " Booked: " + (!a.isAvailable()));
+            switch (choice) {
+                case 1:
+                    viewAppointments();
+                    Main.cls();
+                    break;
+                case 2:
+                    addAppointmentFlow(sc);
+                    Main.cls();
+                    break;
+                case 3:
+                    cancelAppointmentFlow(sc);
+                    Main.cls();
+                    break;
+                case 4:
+                    viewMedicalHistory();
+                    Main.cls();
+                    break;
+                case 5:
+                    System.out.println("Exiting dashboard...");
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
             }
-        }
-        System.out.println("=============================");
+        } while (choice != 5);
     }
 
-    public boolean addAppointment(Doctor doctor, Appointment newApp, Clinic clinic) {
-        if (doctor == null || newApp == null || clinic == null) return false;
-        boolean addedToDoctor = doctor.addapointment(newApp);
-        if (!addedToDoctor) return false;
-        newApp.setBooked(true);
-        clinic.booking(doctor, this, newApp);
-        appointments.add(newApp);
-        return true;
-    }
+    // ====== Appointment Management ======
+    private void addAppointmentFlow(Scanner sc) {
+        System.out.print("Enter Doctor First Name: ");
+        String doctorName = sc.nextLine();
 
-    public boolean editAppointment(Doctor doctor, Appointment existingApp, Date newDate, String newTime, Clinic clinic) {
-        if (doctor == null || existingApp == null || clinic == null) return false;
-        if (!appointments.contains(existingApp)) return false;
-
-        doctor.cancelapointment(existingApp);
-        Appointment modified = new Appointment(newDate, newTime, doctor.getFname());
-
-        boolean added = doctor.addapointment(modified);
-        if (!added) {
-            doctor.addapointment(existingApp);
-            return false;
-        }
-
-        modified.setBooked(true);
-        clinic.booking(doctor, this, modified);
-
-        for (int i = 0; i < appointments.size(); i++) {
-            if (appointments.get(i) == existingApp) {
-                appointments.set(i, modified);
+        Doctor doctor = null;
+        for (Doctor d : Doctor.getalldoctors()) {
+            if (d.getFname().equalsIgnoreCase(doctorName)) {
+                doctor = d;
                 break;
             }
         }
-        return true;
+
+        if (doctor == null) {
+            System.out.println("Doctor not found.");
+            return;
+        }
+
+        doctor.showAvailableAppointments();
+        System.out.print("Choose appointment number: ");
+        int choice = sc.nextInt();
+        sc.nextLine();
+
+        int currentIndex = 0;
+        Appointment selectedApp = null;
+        for (Appointment app : doctor.getAppointments()) {
+            if (app.isAvailable()) {
+                currentIndex++;
+                if (currentIndex == choice) {
+                    selectedApp = app;
+                    break;
+                }
+            }
+        }
+
+        if (selectedApp != null) {
+            selectedApp.book(this.getFname());
+            appointments.add(selectedApp);
+            System.out.println("Appointment booked successfully with Dr. " + doctor.getFname());
+        } else {
+            System.out.println("Invalid choice.");
+        }
     }
 
-    public void cancelAppointment(Doctor doctor, Appointment app) {
-        if (doctor == null || app == null) return;
-        if (!appointments.contains(app)) return;
-        doctor.cancelapointment(app);
+    private void cancelAppointmentFlow(Scanner sc) {
+        if (appointments.isEmpty()) {
+            System.out.println("No appointments to cancel.");
+            return;
+        }
+        viewAppointments();
+        System.out.print("Enter index of appointment to cancel (starting from 0): ");
+        int idx = sc.nextInt();
+        sc.nextLine();
+        if (idx >= 0 && idx < appointments.size()) {
+            Appointment appToCancel = appointments.get(idx);
+            appToCancel.cancel();
+            appointments.remove(appToCancel);
+            System.out.println("Appointment canceled.");
+        } else {
+            System.out.println("Invalid index.");
+        }
     }
 
     public void viewAppointments() {
@@ -97,13 +123,27 @@ public class Patient extends User {
             return;
         }
         System.out.println("Appointments for " + getFname() + ":");
-        for (Appointment a : appointments) {
-            System.out.println(" - Date: " + a.getDate() + " Time: " + a.getTime()
-                    + " Doctor: " + (a.getDoctorName() != null && !a.getDoctorName().isEmpty() ? a.getDoctorName() : "N/A")
-                    + " Booked: " + (!a.isAvailable()));
+        for (int i = 0; i < appointments.size(); i++) {
+            System.out.println(i + ". " + appointments.get(i).toString());
         }
     }
 
+    // ====== Medical History ======
+    public void viewMedicalHistory() {
+        System.out.println("\n===== Medical History =====");
+        System.out.println("General History: " + medicalHistory);
+
+        System.out.println("\nChronic Diseases:");
+        if (chronicDiseases.isEmpty()) System.out.println(" - None");
+        else chronicDiseases.forEach(d -> System.out.println(" - " + d));
+
+        System.out.println("\nSurgical Operations:");
+        if (surgicalOperations.isEmpty()) System.out.println(" - None");
+        else surgicalOperations.forEach(op -> System.out.println(" - " + op));
+        System.out.println("===========================");
+    }
+
+    // ====== Getters & Setters ======
     public ArrayList<Appointment> getAppointments() { return appointments; }
     public void setAppointments(ArrayList<Appointment> appointments) { this.appointments = appointments != null ? appointments : new ArrayList<>(); }
     public String getMedicalHistory() { return medicalHistory; }
