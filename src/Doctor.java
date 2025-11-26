@@ -47,22 +47,20 @@ public class Doctor extends User {
         appointments.remove(app);
      //   app.cancel();
     }
+    // --- Inside the Doctor Class ---
+
     public void showAvailableAppointments() {
         System.out.println("\n--- Available appointments for Dr. " + this.getFname() + " ---");
 
-        boolean found = false;
-
-        for (int i = 0; i < appointments.size(); i++) {
-            Appointment app = appointments.get(i);
-
+        int availableSlotCount = 0;
+        for (Appointment app : this.appointments) {
             if (app.isAvailable()) {
-                System.out.println("[" + (i+1) + "] " + app.toString());
-                found = true;
+                availableSlotCount++;
+                System.out.println("[" + availableSlotCount + "] " + app.toString());
             }
         }
-
-        if (!found) {
-            System.out.println("Sorry, no available slots for this doctor currently.");
+        if (availableSlotCount == 0) {
+            System.out.println("No slots currently available.");
         }
     }
 
